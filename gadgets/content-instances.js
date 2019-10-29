@@ -13,7 +13,9 @@ define(function (require, exports, module) {
                 description: 1,
                 _system: 1,
                 _type: 1,
-                "image.id": 1
+                "image.id": 1,
+                "thumbnail.id": 1,
+                "mainImage.id": 1
             };
 
             this.base(context, model, searchTerm, query, pagination, function (resultMap) {
@@ -40,10 +42,10 @@ define(function (require, exports, module) {
 
             if (row.image && row.image.id) {
                 imageNodeId = row.image.id;
-            } else if (row.thumbnail && row.thumbnail.id) {
-                imageNodeId = row.thumbnail.id;
             } else if (row.mainImage && row.mainImage.id) {
                 imageNodeId = row.mainImage.id;
+            } else if (row.thumbnail && row.thumbnail.id) {
+                imageNodeId = row.thumbnail.id;
             } else {
                 return OneTeam.iconUriForNode(row);
             }
