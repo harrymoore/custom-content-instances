@@ -10,7 +10,10 @@ define(function (require, exports, module) {
         doGitanaQuery: function (context, model, searchTerm, query, pagination, callback) {
             query._fields = {
                 title: 1,
-                description: 1
+                description: 1,
+                _system: 1,
+                _type: 1,
+                "image.id": 1
             };
 
             this.base(context, model, searchTerm, query, pagination, function (resultMap) {
@@ -33,14 +36,19 @@ define(function (require, exports, module) {
         },
 
         iconUri: function (row, model, context) {
-            var _iconUri = OneTeam.iconUriForNode(row);
+            var imageNodeId;
 
             if (row.image && row.image.id) {
-                _iconUri = OneTeam.iconUriForNode(row, { size: 160 });
-                _iconUri = _iconUri.replace(new RegExp("node=" + row._doc + "&"), "node=" + row.image.id + "&");
+                imageNodeId = row.image.id;
+            } else if (row.thumbnail && row.thumbnail.id) {
+                imageNodeId = row.thumbnail.id;
+            } else if (row.mainImage && row.mainImage.id) {
+                imageNodeId = row.mainImage.id;
+            } else {
+                return OneTeam.iconUriForNode(row);
             }
 
-            return _iconUri;
+            return _iconUri = OneTeam.iconUri(this.observable("repository").get()._doc, this.observable("branch").get()._doc, imageNodeId, false, null, { size: 120 }, "image/png");
         }
     }));
 });

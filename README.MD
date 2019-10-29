@@ -12,5 +12,5 @@ Deploy this module to your Cloud CMS Platform (Platform Settings > Modules)
     ID: custom-content-instances
     TITLE: Custom Content Instances
     Source Type: GitHub
-    Source URL: https://github.com/harrymoore/cloudcms-datasource-interceptor
+    Source URL: https://github.com/harrymoore/custom-content-instances
     Path:
