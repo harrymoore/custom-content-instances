@@ -1,0 +1,78 @@
+{
+    "evaluator": "or",
+    "condition": [
+        {
+            "evaluator": "uri-match",
+            "condition": "/projects/{projectId}/content/{qname}"
+        },
+        {
+            "evaluator": "uri-match",
+            "condition": "/projects/{projectId}/content"
+        }
+    ],
+    "config": {
+        "regions": {
+            "center": {
+                "type": "custom-content-instances",
+                "config": {
+                    "chrome": false,
+                    "buttons": [],
+                    "columns": [
+                        {
+                            "title": "Content2",
+                            "key": "titleDescription"
+                        }
+                    ],
+                    "icon": true,
+                    "checkbox": true,
+                    "loader": "gitana",
+                    "actions": true,
+                    "selectorGroups": {
+                        "multi-documents-action-selector-group": {
+                            "actions": []
+                        },
+                        "sort-selector-group": {
+                            "fields": [
+                                {
+                                    "key": "title",
+                                    "title": "Title",
+                                    "field": "title"
+                                },
+                                {
+                                    "key": "description",
+                                    "title": "Description",
+                                    "field": "description"
+                                },
+                                {
+                                    "key": "createdOn",
+                                    "title": "Created On",
+                                    "field": "_system.created_on.ms"
+                                },
+                                {
+                                    "key": "createdBy",
+                                    "title": "Created By",
+                                    "field": "_system.created_by"
+                                },
+                                {
+                                    "key": "modifiedOn",
+                                    "title": "Modified On",
+                                    "field": "_system.modified_on.ms"
+                                },
+                                {
+                                    "key": "modifiedBy",
+                                    "title": "Modified By",
+                                    "field": "_system.modified_by"
+                                },
+                                {
+                                    "key": "size",
+                                    "title": "Size",
+                                    "field": "_system.attachments.default.length"
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
