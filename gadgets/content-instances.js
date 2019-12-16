@@ -5,9 +5,15 @@ define(function (require, exports, module) {
 
     var ContentInstancesGadget = require("app/gadgets/project/content/content-instances");
 
+    // "_type" : "custom:type1",
+    // "date": { 
+    //     "$regex": "\/2016$"
+    // }
+    
     return Ratchet.GadgetRegistry.register("custom-content-instances", ContentInstancesGadget.extend({
 
         doGitanaQuery: function (context, model, searchTerm, query, pagination, callback) {
+            //
             query._fields = {
                 title: 1,
                 description: 1,
@@ -15,8 +21,33 @@ define(function (require, exports, module) {
                 _type: 1,
                 "image.id": 1,
                 "thumbnail.id": 1,
-                "mainImage.id": 1
+                "mainImage.id": 1,
+                date: 1
             };
+
+            var selectedContentTypeDescriptor = model.selectedContentTypeDescriptor;
+            var type = selectedContentTypeDescriptor.definition.getQName();
+            if (type === "custom:type1" || type === "mmcx:press-release") {
+                var year = (new Date()).getFullYear();
+                var year1 = year - 1;
+                query["$or"] = [
+                    {
+                        "date": {
+                            "$regex": '\\/' + year + '$'
+                        }
+                    },
+                    {
+                        "date": {
+                            "$regex": '\\/' + (year - 1) + '$'
+                        }
+                    },
+                    {
+                        "date": {
+                            "$regex": '\\/' + (year - 2) + '$'
+                        }
+                    }
+                ];
+            }
 
             this.base(context, model, searchTerm, query, pagination, function (resultMap) {
 
