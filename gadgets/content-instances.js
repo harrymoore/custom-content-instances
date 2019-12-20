@@ -5,11 +5,6 @@ define(function (require, exports, module) {
 
     var ContentInstancesGadget = require("app/gadgets/project/content/content-instances");
 
-    // "_type" : "custom:type1",
-    // "date": { 
-    //     "$regex": "\/2016$"
-    // }
-    
     return Ratchet.GadgetRegistry.register("custom-content-instances", ContentInstancesGadget.extend({
 
         doGitanaQuery: function (context, model, searchTerm, query, pagination, callback) {
@@ -22,7 +17,9 @@ define(function (require, exports, module) {
                 "image.id": 1,
                 "thumbnail.id": 1,
                 "mainImage.id": 1,
-                date: 1
+                date: 1,
+                "_features.f:locale.locale": 1,
+                "_features.f:translation.locale": 1
             };
 
             var selectedContentTypeDescriptor = model.selectedContentTypeDescriptor;
