@@ -9,7 +9,10 @@ define(function (require, exports, module) {
     return Ratchet.GadgetRegistry.register("custom-content-instances", ContentInstancesGadget.extend({
 
         doGitanaQuery: function (context, model, searchTerm, query, pagination, callback) {
-            //
+            if (!query) {
+                query = {};
+            }
+
             query._fields = {
                 title: 1,
                 description: 1,
@@ -25,26 +28,40 @@ define(function (require, exports, module) {
 
             var selectedContentTypeDescriptor = model.selectedContentTypeDescriptor;
             var type = selectedContentTypeDescriptor.definition.getQName();
-            if (type === "custom:type1" || type === "mmcx:press-release") {
+            if (type === "mmcx:press-release") {
                 var year = (new Date()).getFullYear();
                 var year1 = year - 1;
-                query["$or"] = [
-                    {
-                        "date": {
-                            "$regex": '\\/' + year + '$'
-                        }
-                    },
-                    {
-                        "date": {
-                            "$regex": '\\/' + (year - 1) + '$'
-                        }
-                    },
-                    {
-                        "date": {
-                            "$regex": '\\/' + (year - 2) + '$'
-                        }
+
+                var _or = [];
+
+                _or.push({
+                    "date": {
+                        "$regex": '\\/' + year + '$'
                     }
-                ];
+                });
+                
+                _or.push({
+                    "date": {
+                        "$regex": '\\/' + (year - 1) + '$'
+                    }
+                });
+
+                _or.push({
+                    "date": {
+                        "$regex": '\\/' + (year - 2) + '$'
+                    }
+                });
+
+                if (searchTerm) {
+                    query.$and = [OneTeam.searchQuery(searchTerm, ["title", "description"])];
+                    query.$and.push({$or: _or});
+                } else {
+                    query.$or = _or;
+                }
+            } else {
+                if (searchTerm) {
+                    Object.assign(query, OneTeam.searchQuery(searchTerm, ["title", "description"]));
+                }
             }
 
             this.base(context, model, searchTerm, query, pagination, function (resultMap) {
