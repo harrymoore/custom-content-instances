@@ -19,7 +19,7 @@
                     "buttons": [],
                     "columns": [
                         {
-                            "title": "Content2",
+                            "title": "Content",
                             "key": "titleDescription"
                         }
                     ],
